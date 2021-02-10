@@ -1,3 +1,3 @@
 # Random-User-Generator
-A Progressive Web App to generate Random User
+A Random User Generater
 using own API
