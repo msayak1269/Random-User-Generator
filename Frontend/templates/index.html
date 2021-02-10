@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <style>
+        #user {
+            margin-top: 2vh;
+            background-image: linear-gradient(to bottom right, lightblue, #5737D6);
+        }
+
+        body {
+            height: 185vh;
+            background-image: linear-gradient(to top right, #FF9F4A, #FF3C83);
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0px 0px 20px 0px white;
+        }
+        #codeCard{
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        #codeCard::-webkit-scrollbar {
+            display: none;
+        }
+        img, .card {
+            -moz-border-radius: 30px;
+            -webkit-border-radius: 30px;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="p-3 bg-none text-white text-center" style="border-bottom: 1px solid white;">
+        <h4>Random User Generator </h4>
+    </div>
+    <div class="container mx-auto row">
+
+        <div class="col-md-5 col-sm-12">
+            <div class="container text-center mt-3" id="phImg">
+                <img src="/user.jpg" alt="placeholder" height="80%" width="80%">
+            </div>
+            <div class="card container bg-white text-white text-center" id="user">
+                <div class="bg-none mt-3" id="image">
+                </div>
+                <div class="card-body">
+                    <span style="font-weight: bold;" class="text-warning">User Name :</span> <span id="name"></span><br>
+                    <span style="font-weight: bold;" class="text-warning">User Email :</span> <span
+                        id="email"></span><br>
+                    <span style="font-weight: bold;" class="text-warning">User D.O.B :</span> <span id="dob"></span><br>
+                    <span style="font-weight: bold;" class="text-warning">Password :</span> <span id="password"></span><br>
+                    <span style="font-weight: bold;" class="text-warning">Address :</span> <span id="address"></span><br>
+                    <span style="font-weight: bold;" class="text-warning">Contact :</span> <span id="contact"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-0 text-center">
+            <br>
+            <div class="container text-center mt-3" id="buttonDiv">
+                <button id="button" class="btn btn-outline-light btn-lg">Get User</button>
+            </div>
+            
+            <div class="container text-center mt-4" id="buttonDiv">
+                <button id="copyButton" class="btn btn-outline-light btn-lg">Copy User Details</button>
+            </div>
+            <br><br>
+        </div>
+        <input id="copyInput" style="background-color: none;">
+        <div class="col-md-5 col-sm-0 text-center mt-3">
+            <div id="codeCard" class="card">
+                <div class="card-header text-center"><h6>Use My API</h6></div>
+                
+                <div class="card-body text-left">
+                    <code>
+                        fetch("https://randomuserapi.pythonanywhere.com/api/get/user", { <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;method: "GET" <br>
+                        }).then((response) => { <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;return response.json(); <br>
+                        }).then((data) => { <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;// use the data <br>
+                        });
+                        <br><br>
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        
+        var details;
+        $(document).ready(function () {
+            $("#copyInput").hide();
+            $("#user").hide();
+            $("#copyButton").hide();
+            $("#button").click(() => {
+                details="";
+                fetch("http://127.0.0.1:5000/api/get/user", {
+                    method: "GET"
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    // use the data
+                    $("#phImg").hide();
+                    $("#user").show();
+                    $("#copyButton").show();
+                    $("#name").text(`${data.firstName} ${data.lastName}`);
+                    $("#email").text(data.email);
+                    $("#dob").text(data.dob);
+                    $("#password").text(data.password);
+                    $('#address').text(data.address);
+                    $('#contact').text(data.phoneNo);
+                    $("#image").html(`<img src="${data.image}" alt="image" height="100%" width="100%">`);
+                    details += "Name : "+data.firstName+" "+data.lastName+"  \n"+
+                                "Email : "+data.email+"  \n"+
+                                "D.O.B. : "+data.dob+"  \n"+
+                                "Password : "+data.password+"  \n"+
+                                "Address : "+data.address+"  \n"+
+                                "Contact : "+data.phoneNo+"  \n";
+                    //console.log(details); 
+                    // $("#copyButton").click(() => {
+                    //     $('<input>').val(details).select();
+                    //     document.execCommand("copy");
+                    //     //alert("User Details Copied");
+                    //  });          
+                })
+            });
+            $("#copyButton").click(() => {
+                $("#copyInput").show();
+                $('#copyInput').val(details).select();
+                document.execCommand("copy");
+                $("#copyInput").hide();
+                //alert("User Details Copied");
+            });
+        });
+
+    </script>
+</body>
+
+</html>
